@@ -1,0 +1,18 @@
+{
+    "name": "bilel/blog",
+    "description": "ECF",
+    "autoload": {
+        "psr-4": {
+            "Bilel\\Blog\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "bilel zaaraoui",
+            "email": "bilelzara@gmail.com"
+        }
+    ],
+    "require": {
+        "altorouter/altorouter": "^2.0"
+    }
+}
