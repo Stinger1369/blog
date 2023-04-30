@@ -10,7 +10,7 @@
       <p><?= $post->getBody() ?></p>
       <?php $user = $post->getUser(); ?>
       <?php if ($user !== null) : ?>
-        <p class="small text-muted">By <?= $user->getName() ?> on <?= $post->getCreatedAt() ?></p>
+        <p class="small text-muted">By <?= $user->getName() ?> on <?= $post->getCreated_At() ?></p>
       <?php endif; ?>
     </article>
   <?php endforeach; ?>

@@ -64,9 +64,10 @@ class PostController
     header('Location: /admin/posts');
   }
 
-  public function delete($id)
+  public function delete($params)
   {
     // Récupération du post correspondant à l'identifiant $id
+    $id = $params['id'];
     $post = Post::getById($id);
 
     // Suppression du post

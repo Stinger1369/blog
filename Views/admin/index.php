@@ -23,10 +23,13 @@
           <td><?php echo $post->getCreated_At(); ?></td>
           <td><?php echo $post->getUpdated_At(); ?></td>
           <td>
-            <a href="/views/admin/edit-post.php?id=<?php echo $post->getId(); ?>" class="btn btn-primary">Edit</a>
-            <form method="POST" action="/Views/admin/delete-post.php" style="display: inline-block;">
+            <a href="/blog/views/admin/edit-post.php?id=<?php echo $post->getId(); ?>" class="btn btn-primary">Edit</a>
+            <form method="POST" action="<?php echo BASE_URL; ?>/admin/posts/<?php echo $post->getId(); ?>/delete" style="display: inline-block;">
               <input type="hidden" name="id" value="<?php echo $post->getId(); ?>">
-              <button type="submit" class="btn btn-danger">Delete</button>
+              <form method="POST" action="/blog/Views/admin/delete-post.php" style="display: inline-block;">
+                <input type="hidden" name="id" value="<?php echo $post->getId(); ?>">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
             </form>
           </td>
         </tr>

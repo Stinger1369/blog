@@ -16,6 +16,9 @@ class AdminController
       exit;
     }
 
+    // Afficher un message de bienvenue
+    $welcomeMessage = "Bienvenue sur la page d'administration, " . $_SESSION['user_name'] . "!";
+
     // Récupérer tous les posts
     $posts = Post::getAll();
 
@@ -134,7 +137,7 @@ class AdminController
     $post->save();
 
     // Rediriger vers la liste des articles
-    header('Location: ' . BASE_URL . '/admin/posts');
+    header('Location: ' . BASE_URL . '/admin');
     exit;
   }
 }

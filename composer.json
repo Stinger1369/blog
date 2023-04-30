@@ -3,7 +3,9 @@
     "description": "ECF",
     "autoload": {
         "psr-4": {
-            "Bilel\\Blog\\": "src/"
+            "Controllers\\": "Controllers/",
+            "Models\\": "Models/",
+            "Config\\": "Config/"
         }
     },
     "authors": [

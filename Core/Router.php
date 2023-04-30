@@ -24,7 +24,7 @@ class Router
     $this->router->map('POST', '/posts/[i:id]/update', 'Controllers\PostController#update');
     $this->router->map('GET', '/posts/add', 'Controllers\PostController#add');
     $this->router->map('POST', '/posts/create', 'Controllers\PostController#create');
-    $this->router->map('POST', '/posts/[i:id]/delete', 'Controllers\PostController#delete');
+    $this->router->map('POST', '/admin/posts/[i:id]/delete', 'Controllers\PostController#delete');
 
     // Commentaires
     $this->router->map('POST', '/comments/create', 'Controllers\CommentController#create');

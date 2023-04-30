@@ -94,7 +94,11 @@ class Post
   {
     $pdo = Database::getInstance()->getConnection();
 
+    // Supprimer les commentaires liés au post
+    $stmt = $pdo->prepare('DELETE FROM comments WHERE id = ?');
+    $stmt->execute([$this->id]);
 
+    // Supprimer le post
     $stmt = $pdo->prepare('DELETE FROM posts WHERE id = ?');
     $stmt->execute([$this->id]);
   }

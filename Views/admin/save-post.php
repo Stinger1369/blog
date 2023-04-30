@@ -28,4 +28,4 @@ $post = new Post($title, $body, $userId);
 $post->save();
 
 // Rediriger vers la liste des articles
-header('Location: ' . BASE_URL . '/admin/posts');
+header('Location: ' . BASE_URL . 'Blog/admin');
