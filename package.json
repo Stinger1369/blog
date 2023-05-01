@@ -1,4 +1,10 @@
 {
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "Description de mon projet",
+  "scripts": {
+    "build": "postcss public/css/style.css -o public/css/style.css"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
     "postcss-cli": "^10.1.0",

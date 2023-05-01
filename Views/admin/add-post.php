@@ -1,31 +1,24 @@
-
 <?php
 require_once __DIR__ . '/../partials/header.php';
 require_once __DIR__ . '/../../controllers/AdminController.php';
 ?>
 
-<!DOCTYPE html>
-
-<html>
-
-<head>
-  <meta charset="UTF-8">
-  <title>Add Post</title>
-</head>
-
-<body>
-  <?php require_once __DIR__ . '/../../config/config.php';
-  ?>
-  <h1>Add Post</h1>
-  <form action="<?php echo BASE_URL ?>/admin/save-post" method="post">
-    <label for="title">Title:</label>
-    <input type="text" name="title" id="title">
-    <br>
-    <label for="body">Body:</label>
-    <textarea name="body" id="body"></textarea>
-    <br>
-    <input type="submit" value="Save">
+<body class="bg-gray-100">
+  <?php require_once __DIR__ . '/../../config/config.php'; ?>
+  <h1 class="text-4xl font-bold mb-8">Add Post</h1>
+  <form action="<?php echo BASE_URL ?>/admin/save-post" method="post" class="w-1/2 mx-auto">
+    <div class="mb-4">
+      <label for="title" class="block text-gray-700 font-bold mb-2">Title:</label>
+      <input type="text" name="title" id="title" class="w-full rounded-lg border-gray-300">
+    </div>
+    <div class="mb-4">
+      <label for="body" class="block text-gray-700 font-bold mb-2">Body:</label>
+      <textarea name="body" id="body" class="w-full rounded-lg border-gray-300"></textarea>
+    </div>
+    <div class="flex justify-center">
+      <input type="submit" value="Save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    </div>
   </form>
 </body>
 
-</html>
+<?php require_once __DIR__ . '/../partials/footer.php'; ?>

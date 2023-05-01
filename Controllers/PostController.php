@@ -44,10 +44,10 @@ class PostController
   {
     if (isset($_GET['id'])) {
       $id = $_GET['id'];
-      echo 'Fonction edit appelée avec id: ' . $id . '<br>';
+      //echo 'Fonction edit appelée avec id: ' . $id . '<br>';
       // Récupération du post correspondant à l'identifiant $id
       $post = Post::getById($id);
-      var_dump($id);
+      //var_dump($id);
 
       if (!$post) {
         // Redirige vers la page d'erreur 404 si le post n'existe pas
