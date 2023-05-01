@@ -116,6 +116,7 @@ class Comment extends Model
 
     return $result;
   }
+
   public function save()
   {
     $db = static::getDb();

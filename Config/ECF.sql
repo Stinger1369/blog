@@ -38,14 +38,33 @@ CREATE TABLE `comments` (
 
 
 
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
-  `role` varchar(10) NOT NULL DEFAULT 'user'
+  `role` varchar(10) NOT NULL DEFAULT 'user',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT IGNORE INTO `user` (`id`, `name`, `username`, `email`, `password_hash`, `role`, `created_at`, `updated_at`) VALUES
+(1, 'Jhon Doe', 'jhon', 'bilelzara@gmail.com', '$2y$10$ZV0DcWPRnJ.7wCxbF3uRuu98FaGP/s10itB9HGqO.d.0.o2Bwu6jG', 'admin', NULL, NULL),
+(2, 'Ervin Howell', 'Antonette', 'Shanna@melissa.tv', '$2y$10$lGOHQIVPXoM7h6dMJdynqO7.qfFLtLXaFjeAR/RZ5X.tzepzlnrIO', 'user', NULL, NULL),
+(3, 'Clementine Bauch', 'Samantha', 'Nathan@yesenia.net', '$2y$10$P2566T/xFViID8InF9AqseQCPFh46G7FHb438YqCRYrnUGuggPJ9q', 'user', NULL, NULL),
+(4, 'Patricia Lebsack', 'Karianne', 'Julianne.OConner@kory.org', '$2y$10$6xQfxzdXwFd6oFE.y10KGeiYwqMGZboBz0ktWlSugS3bxDJyxlaia', 'user', NULL, NULL),
+(5, 'Chelsey Dietrich', 'Kamren', 'Lucio_Hettinger@annie.ca', '$2y$10$PBjFLQKlR811I0zN9zjmNuhyXuWPYkXCVjOp3xuYlEjatt6lq6Ye.', 'user', NULL, NULL),
+(6, 'Mrs. Dennis Schulist', 'Leopoldo_Corkery', 'Karley_Dach@jasper.info', '$2y$10$QMtDbxHE.A1geLTnWr08Fe1FWtYrQrX5wqQZkIVmRdO/9lE/Xmemm', 'user', NULL, NULL),
+(7, 'Kurtis Weissnat', 'Elwyn.Skiles', 'Telly.Hoeger@billy.biz', '$2y$10$k1r223tnU18mJtJHJ1IFFutTkHlwvoXiUohs.QvipWh95RQvTSJBa', 'user', NULL, NULL),
+(8, 'Nicholas Runolfsdottir V', 'Maxime_Nienow', 'Sherwood@rosamond.me', '$2y$10$YiIDGZWiSAJEAvd.dHpAP.RsejaHobG9uGY3pMB5JLH.uR6.3RB5O', 'user', NULL, NULL),
+(9, 'Glenna Reichert', 'Delphine', 'Chaim_McDermott@dana.io', '$2y$10$8yfviMoR9dWtNJlT7VkpLO9SHKHoKJMVji1iJnLNtg9Gk9TtdKtle', 'user', NULL, NULL),
+(10, 'Clementina DuBuque', 'Moriah.Stanton', 'Rey.Padberg@karina.biz', '$2y$10$fbGJLyCP0ShliB7g./6LQeTJsv1Dn3/4RGRWCOVMKjALP4k4YC.iu', 'user', NULL, NULL);
+
 
 
 

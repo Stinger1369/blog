@@ -14,17 +14,20 @@ class Router
     $this->router = new AltoRouter();
     $this->router->setBasePath(BASE_URL);
 
+
     // Accueil
     $this->router->map('GET', '/', 'Controllers\HomeController#index');
-
     // Articles
-    $this->router->map('GET', '/posts', 'Controllers\PostController#index');
-    $this->router->map('GET', '/posts/[i:id]', 'Controllers\PostController#show');
-    $this->router->map('GET', '/posts/[i:id]/edit', 'Controllers\PostController#edit');
-    $this->router->map('POST', '/posts/[i:id]/update', 'Controllers\PostController#update');
-    $this->router->map('GET', '/posts/add', 'Controllers\PostController#add');
-    $this->router->map('POST', '/posts/create', 'Controllers\PostController#create');
-    $this->router->map('POST', '/admin/posts/[i:id]/delete', 'Controllers\PostController#delete');
+    //$this->router->map('GET', '/posts', 'Controllers\PostController#index');
+    //$this->router->map('GET', '/posts/[i:id]/', 'Controllers\PostController#show');
+    $this->router->map('GET', '/admin/edit-post', 'Controllers\PostController#edit');
+
+
+
+    $this->router->map('POST', '/admin/edit-post', 'Controllers\PostController#update');
+
+    $this->router->map('POST', '/posts/create/', 'Controllers\PostController#create');
+    $this->router->map('POST', '/admin/delete-post', 'Controllers\PostController#delete');
 
     // Commentaires
     $this->router->map('POST', '/comments/create', 'Controllers\CommentController#create');
@@ -36,12 +39,28 @@ class Router
     $this->router->map('GET', '/register', 'Controllers\UserController#register');
 
     // Admin
+
     $this->router->map('GET', '/admin', 'Controllers\AdminController#index');
     $this->router->map('GET', '/admin/users', 'Controllers\AdminController#users');
-    $this->router->map('GET', '/admin/users/[i:id]/edit', 'Controllers\AdminController#editUser');
-    $this->router->map('POST', '/admin/users/[i:id]/update', 'Controllers\AdminController#updateUser');
-    $this->router->map('POST', '/admin/users/[i:id]/delete', 'Controllers\AdminController#deleteUser');
-    $this->router->map('POST', '/admin/save-post', 'Controllers\AdminController#savePostAction');
+
+    $this->router->map('POST', '/admin/userCrud/userUpdate/[:id]', 'Controllers\AdminController#editUser');
+    $this->router->map('GET', '/admin/userCrud/userUpdate/[:id]', 'Controllers\AdminController#editUser');
+    //$this->router->map('POST', '/admin/users/[i:id]/delete', 'Controllers\AdminController#deleteUser');
+    $this->router->map('POST', '/admin/userCrud/delete/[i:id]', 'Controllers\AdminController#deleteUser');
+
+    $this->router->map('GET', '/admin/manage-users', 'Controllers\AdminController#manage_users');
+
+    //$this->router->map('GET|POST', '/admin/userCrud/create', 'Controllers\AdminController#add_user');
+    $this->router->map('GET|POST', '/admin/userCrud/create', 'Controllers\AdminController#addUser');
+
+
+
+
+    $this->router->map('POST', '/admin/save-post', 'Controllers\PostController#savePostAction');
+    $this->router->map('GET', '/admin/add-post', 'Controllers\PostController#addPost');
+
+
+
 
 
     // Erreur 404
@@ -67,7 +86,7 @@ class Router
     // Ajoutez ces lignes pour déboguer :
     //echo '<pre>';
     //var_dump($match);
-    //echo '</pre>';
+   // echo '</pre>';
 
     if ($match !== false) {
       list($controllerName, $methodName) = explode('#', $match['target']);
@@ -88,6 +107,4 @@ class Router
       $controller->notFound();
     }
   }
-
-
 }

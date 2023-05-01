@@ -4,4 +4,4 @@ define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'ECF');
-define('BASE_URL', '/Blog');
+define('BASE_URL', '/blog');

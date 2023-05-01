@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . '/../partials/header.php';
+
+
+
+use Models\User;
+
+$users = User::getAll();
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -9,7 +20,7 @@
 <body>
   <h1>Manage Users</h1>
 
-  <a href="/admin/users/create">Create new user</a>
+  <a href="<?php echo BASE_URL; ?>/admin/userCrud/create">Create new user</a>
 
   <table>
     <thead>
@@ -17,28 +28,42 @@
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Role</th>
         <th>Created At</th>
         <th>Updated At</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($users as $user) : ?>
+      <?php if (!empty($users)) : ?>
+        <?php foreach ($users as $user) : ?>
+          <tr>
+            <td><?php echo $user->getId(); ?></td>
+            <td><?php echo $user->getName(); ?></td>
+            <td><?php echo $user->getEmail(); ?></td>
+            <td><?php echo $user->getRole(); ?></td>
+            <td><?php echo $user->getCreated_At(); ?></td>
+            <td><?php echo $user->getUpdated_At(); ?></td>
+            <td>
+              <a href="<?php echo BASE_URL; ?>/admin/userCrud/userUpdate/<?php echo $user->getId(); ?>">Edit</a>
+
+              <form id="delete-user-form-<?php echo $user->getId(); ?>" method="POST" action="<?php echo BASE_URL; ?>/admin/userCrud/delete/<?php echo $user->getId(); ?>" onsubmit="return confirmDelete('<?php echo $user->getName(); ?>')">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      <?php else : ?>
         <tr>
-          <td><?php echo $user->getId(); ?></td>
-          <td><?php echo $user->getName(); ?></td>
-          <td><?php echo $user->getEmail(); ?></td>
-          <td><?php echo $user->getCreatedAt(); ?></td>
-          <td><?php echo $user->getUpdatedAt(); ?></td>
-          <td>
-            <a href="/admin/users/<?php echo $user->getId(); ?>/edit">Edit</a>
-            <form method="POST" action="/admin/users/<?php echo $user->getId(); ?>/delete" onsubmit="return confirm('Are you sure you want to delete this user?')">
-              <input type="hidden" name="_method" value="DELETE">
-              <button type="submit">Delete</button>
-            </form>
-          </td>
+          <td colspan="7">No users found.</td>
         </tr>
-      <?php endforeach; ?>
+      <?php endif; ?>
+      <script>
+        function confirmDelete(username) {
+          return confirm("Are you sure you want to delete user " + username + "?");
+        }
+      </script>
     </tbody>
   </table>
 </body>

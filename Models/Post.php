@@ -5,6 +5,7 @@ namespace Models;
 require_once __DIR__ . '/../Config/Database.php';
 
 use Config\Database;
+use Models\Comment;
 class Post
 {
   protected $id;
@@ -43,7 +44,7 @@ class Post
     $pdo = Database::getInstance()->getConnection();
 
     $stmt = $pdo->prepare('SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit');
-    $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+    $stmt->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
     $stmt->execute();
 
     $posts = [];
@@ -77,18 +78,25 @@ class Post
   public function save()
   {
     $pdo = Database::getInstance()->getConnection();
-
+    $currentDateTime = date('Y-m-d H:i:s');
 
     if ($this->id === null) {
+      $this->created_at = $currentDateTime;
       $stmt = $pdo->prepare('INSERT INTO posts (title, body, userId, created_at, updated_at) VALUES (?, ?, ?, ?, ?)');
-      $stmt->execute([$this->title, $this->body, $this->userId, $this->created_at, $this->updated_At]);
+      $stmt->execute([$this->title, $this->body, $this->userId, $this->created_at, $this->updated_At ?? $currentDateTime]);
+
+
 
       $this->id = $pdo->lastInsertId();
     } else {
+      $this->updated_At = $currentDateTime;
       $stmt = $pdo->prepare('UPDATE posts SET title = ?, body = ?, userId = ?, updated_at = ? WHERE id = ?');
-      $stmt->execute([$this->title, $this->body, $this->userId, $this->updated_At, $this->id]);
+      $stmt->execute([$this->title, $this->body, $this->userId, $this->updated_At ?? $currentDateTime, $this->id]);
     }
   }
+
+
+
 
   public function delete()
   {
@@ -186,6 +194,6 @@ class Post
   public function getComments()
   {
     // Récupération des commentaires associés à ce post
-    return $this->getByPostId($this->id);
+    return self::getByPostId($this->id);
   }
 }

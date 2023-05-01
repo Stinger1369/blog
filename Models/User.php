@@ -10,22 +10,24 @@ class User
 {
   protected $id;
   protected $name;
-  protected $email;
+  protected $username;
   protected $password;
+  protected $email;
   protected $passwordHash;
-  protected $createdAt;
-  protected $updatedAt;
+  protected $created_At;
+  protected $updated_At;
   protected $role;
   protected $db;
 
-  public function __construct($email = null, $passwordHash = null, $id = null, $name = null, $createdAt = null, $updatedAt = null, $role = null)
+  public function __construct($email = null, $passwordHash = null, $id = null, $name = null, $username = null, $created_At = null, $updated_At = null, $role = null)
   {
     $this->id = $id;
     $this->name = $name;
+    $this->username = $username;
     $this->email = $email;
     $this->passwordHash = $passwordHash;
-    $this->createdAt = $createdAt;
-    $this->updatedAt = $updatedAt;
+    $this->created_At = $created_At;
+    $this->updated_At = $updated_At;
     $this->role = $role;
     $this->db = Database::getInstance()->getConnection();
   }
@@ -47,33 +49,45 @@ class User
 
   public function save()
   {
+    if (!$this->db) {
+      $this->db = Database::getInstance()->getConnection();
+    }
     $pdo = Database::getInstance()->getConnection();
 
-    if ($this->id === null) {
-      $stmt = $pdo->prepare('INSERT INTO user (email, password_hash, created_at, updated_at) VALUES (?, ?, ?, ?)');
-      $stmt->execute([$this->email, $this->passwordHash, $this->createdAt, $this->updatedAt]);
+    // Mettre à jour le champ updated_at
+    $this->updated_At = date("Y-m-d H:i:s");
 
+    if ($this->id === null) {
+      $stmt = $pdo->prepare('INSERT INTO user (name, email, password_hash, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)');
+      $stmt->execute([$this->name, $this->email, $this->passwordHash, $this->role, $this->created_At, $this->updated_At]);
       $this->id = $pdo->lastInsertId();
     } else {
-      $stmt = $pdo->prepare('UPDATE user SET email = ?, password_hash = ?, updated_at = ? WHERE id = ?');
-      $stmt->execute([$this->email, $this->passwordHash, $this->updatedAt, $this->id]);
+      $stmt = $pdo->prepare('UPDATE user SET name = ?, email = ?, password_hash = ?, role = ?, updated_at = ? WHERE id = ?');
+      $stmt->execute([$this->name, $this->email, $this->passwordHash, $this->role, $this->updated_At, $this->id]);
     }
   }
 
+
   public static function getAll()
   {
-    $pdo = Database::getInstance()->getConnection();
+    $db = Database::getInstance();
+    if (!$db->getConnection()) {
+      return null;
+    }
+
+    $pdo = $db->getConnection();
 
     $stmt = $pdo->query('SELECT * FROM user');
 
     $users = [];
     while ($row = $stmt->fetch()) {
-      $user = new User($row['email'], $row['password_hash'], $row['id'], $row['name'], $row['created_at'], $row['updated_at'], $row['role']);
+      $user = new User($row['email'], $row['password_hash'], $row['id'], $row['name'], $row['username'], $row['created_at'], $row['updated_at'], $row['role']);
       $users[] = $user;
     }
 
     return $users;
   }
+
 
   public function getName()
   {
@@ -104,18 +118,22 @@ class User
     $this->role = $role;
   }
 
-  public function delete()
-  {
+public function delete()
+{
     // Prepare the delete query
-    $sql = "DELETE FROM users WHERE id = :id";
-    $stmt = $GLOBALS['pdo']->prepare($sql);
+    $sql = "DELETE FROM user WHERE id = :id";
+
+    if (!$this->db) {
+        $this->db = Database::getInstance()->getConnection();
+    }
+    $stmt = $this->db->prepare($sql);
 
     // Bind the user ID to the query
     $stmt->bindValue(':id', $this->id);
 
     // Execute the query
     return $stmt->execute();
-  }
+}
 
 // Getters and setters
 public function getId()
@@ -143,37 +161,43 @@ public function setPasswordHash($passwordHash)
 $this->passwordHash = $passwordHash;
 }
 
-public function getCreatedAt()
+public function getCreated_At()
 {
-return $this->createdAt;
+return $this->created_At;
 }
 
-public function setCreatedAt($createdAt)
+public function setCreated_At($created_At)
 {
-$this->createdAt = $createdAt;
+$this->created_At = $created_At;
 }
 
-public function getUpdatedAt()
+public function getUpdated_At()
 {
-return $this->updatedAt;
+return $this->updated_At;
 }
 
-public function setUpdatedAt($updatedAt)
+public function setUpdated_At($updated_At)
 {
-$this->updatedAt = $updatedAt;
+$this->updated_At = $updated_At;
 }
 
-public function authenticate($email, $password)
-{
-$db = Database::getInstance()->getConnection();$stmt = $db->prepare('SELECT * FROM user WHERE email = ?');
-$stmt->execute([$email]);
-$user = $stmt->fetch();
+  public function authenticate($email, $password)
+  {
+    $pdo = Database::getInstance()->getConnection();
 
-if ($user && password_verify($password, $user['password_hash'])) {
-  return new User($user['email'], $user['password_hash'], $user['id'], $user['name'], $user['created_at'], $user['updated_at'], $user['role']);
+    $stmt = $pdo->prepare('SELECT * FROM user WHERE email = ?');
+    $stmt->execute([$email]);
+    $result = $stmt->fetch();
 
-} else {
-  return null;
+    if ($result && password_verify($password, $result['password_hash'])) {
+      $user = new User();
+      $user->setId($result['id']);
+      $user->setName($result['name']);
+      $user->setEmail($result['email']);
+      $user->setRole($result['role']);
+      return $user;
     }
+
+    return false;
   }
 }

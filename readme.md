@@ -1,4 +1,4 @@
-## blog/ ##
+blog
 │
 ├── config/
 │   ├── config.php
@@ -154,4 +154,5 @@ F:.
             header.php
 
 
-tree /F /A | findstr /v /c:"\\vendor\\"
+tree /F /A | findstr /v /c:"\\vendor\\" /c:"\\node_modules\\"
+ Xdebug

@@ -11,7 +11,7 @@ class HomeController
 
     // Récupération des 12 derniers posts
     $posts = Post::getLatestPosts(12);
-    echo 'Nombre de posts récupérés : ' . count($posts);
+    //echo 'Nombre de posts récupérés : ' . count($posts);
     // Affichage de la vue home/index.php avec les données récupérées
     require __DIR__ . '/../views/home/index.php';
   }
@@ -30,4 +30,8 @@ class HomeController
     // Affichage de la vue home/show.php avec les données récupérées
     require __DIR__ . '/../views/home/show.php';
   }
+  //public function test()
+ // {
+  //  echo 'This is a test route';
+  //}
 }
