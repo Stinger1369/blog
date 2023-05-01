@@ -117,23 +117,53 @@ class User
   {
     $this->role = $role;
   }
-
-public function delete()
-{
-    // Prepare the delete query
-    $sql = "DELETE FROM user WHERE id = :id";
+  public function deleteAssociatedPosts()
+  {
+    // Supprimer d'abord les commentaires associés aux articles de l'utilisateur
+    $sql = "DELETE comments FROM comments INNER JOIN posts ON comments.postId = posts.id WHERE posts.userId = :id";
 
     if (!$this->db) {
-        $this->db = Database::getInstance()->getConnection();
+      $this->db = Database::getInstance()->getConnection();
     }
     $stmt = $this->db->prepare($sql);
 
-    // Bind the user ID to the query
+    // Associer l'ID utilisateur à la requête
     $stmt->bindValue(':id', $this->id);
 
-    // Execute the query
+    // Exécuter la requête
+    $stmt->execute();
+
+    // Supprimer les articles de l'utilisateur
+    $sql = "DELETE FROM posts WHERE userId = :id";
+
+    $stmt = $this->db->prepare($sql);
+
+    // Associer l'ID utilisateur à la requête
+    $stmt->bindValue(':id', $this->id);
+
+    // Exécuter la requête
     return $stmt->execute();
-}
+  }
+
+  public function delete()
+  {
+    // Supprimer tous les articles associés à l'utilisateur
+    $this->deleteAssociatedPosts();
+
+    // Préparer la requête de suppression
+    $sql = "DELETE FROM user WHERE id = :id";
+
+    if (!$this->db) {
+      $this->db = Database::getInstance()->getConnection();
+    }
+    $stmt = $this->db->prepare($sql);
+
+    // Associer l'ID utilisateur à la requête
+    $stmt->bindValue(':id', $this->id);
+
+    // Exécuter la requête
+    return $stmt->execute();
+  }
 
 // Getters and setters
 public function getId()

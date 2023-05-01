@@ -59,6 +59,7 @@ class Router
     $this->router->map('POST', '/admin/save-post', 'Controllers\PostController#savePostAction');
     $this->router->map('GET', '/admin/add-post', 'Controllers\PostController#addPost');
 
+    //$this->router->map('GET|POST', '/admin/userCrud/register', 'UserController#register');
 
 
 

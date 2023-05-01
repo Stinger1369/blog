@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css">
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex flex-col min-h-screen">
   <header class="bg-gray-800 text-white py-2 px-4 md:px-8">
     <nav class="flex justify-between">
       <div class="flex items-center">
@@ -24,12 +24,11 @@
           <li class="text-gray-300">Bonjour <?php echo $_SESSION['user_name']; ?></li>
         <?php else : ?>
           <li><a href="<?= BASE_URL ?>/login" class="hover:text-gray-300">Login</a></li>
+          <li><a href="<?= BASE_URL ?>/register" class="hover:text-gray-300">Inscription</a></li>
         <?php endif; ?>
       </ul>
     </nav>
   </header>
-
-
 </body>
 
 </html>
