@@ -4,6 +4,9 @@ namespace Models;
 
 use PDO;
 use Exception;
+use Config\Database;
+
+
 
 require_once __DIR__ . '/Model.php';
 
@@ -12,19 +15,52 @@ class Comment extends Model
   protected $id;
   protected $postId;
   protected $userId;
-  protected $body;
-  protected $createdAt;
-  protected $updatedAt;
+  protected $user;
 
-  public function __construct($postId, $userId, $body)
+  protected $body;
+  protected $name;
+  protected $email;
+  protected $created_at;
+  protected $updated_at;
+
+
+
+  public function __construct($postId = null, $name = null, $email = null, $body = null)
   {
     $this->postId = $postId;
-    $this->userId = $userId;
+    $this->name = $name;
+    $this->email = $email;
     $this->body = $body;
-    $this->createdAt = date('Y-m-d H:i:s');
-    $this->updatedAt = date('Y-m-d H:i:s');
+    $this->created_at = date('Y-m-d H:i:s');
+    $this->updated_at = date('Y-m-d H:i:s');
+  }
+  public function setId($id)
+  {
+    $this->id = $id;
   }
 
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+
+  public function setEmail($email)
+  {
+    $this->email = $email;
+  }
+  public function getId()
+  {
+    return $this->id;
+  }
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  public function getEmail()
+  {
+    return $this->email;
+  }
   public function getPostId()
   {
     return $this->postId;
@@ -55,37 +91,38 @@ class Comment extends Model
     $this->body = $body;
   }
 
-  public function getCreatedAt()
+  public function getcreatedAt()
   {
-    return $this->createdAt;
+    return $this->created_at;
   }
 
-  public function setCreatedAt($createdAt)
+  public function setcreated_at($created_at)
   {
-    $this->createdAt = $createdAt;
+    $this->created_at = $created_at;
   }
 
-  public function getUpdatedAt()
+  public function getupdated_at()
   {
-    return $this->updatedAt;
+    return $this->updated_at;
   }
 
-  public function setUpdatedAt($updatedAt)
+  public function setupdated_at($updated_at)
   {
-    $this->updatedAt = $updatedAt;
+    $this->updated_at = $updated_at;
   }
 
   public static function getAllByPostId($postId)
   {
     $db = static::getDb();
 
-    $query = 'SELECT * FROM comments WHERE post_id = :postId';
+    $query = 'SELECT * FROM comments WHERE postId = :postId';
     $stmt = $db->prepare($query);
     $stmt->bindParam(':postId', $postId, PDO::PARAM_INT);
     $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_CLASS, 'Comment');
+    return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
   }
+
 
   protected static function getTableName()
   {
@@ -123,24 +160,85 @@ class Comment extends Model
 
     if ($this->id) {
       // Update the existing comment
-      $query = 'UPDATE ' . static::getTableName() . ' SET post_id = :postId, user_id = :userId, body = :body, updated_at = :updatedAt WHERE id = :id';
+      $query = 'UPDATE ' . static::getTableName() . ' SET post_id = :postId, user_id = :userId, body = :body, updated_at = :updated_at WHERE id = :id';
       $stmt = $db->prepare($query);
       $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
     } else {
       // Insert a new comment
-      $query = 'INSERT INTO ' . static::getTableName() . ' (post_id, user_id, body, created_at, updated_at) VALUES (:postId, :userId, :body, :createdAt, :updatedAt)';
+      $query = 'INSERT INTO ' . static::getTableName() . ' (post_id, user_id, body, created_at, updated_at) VALUES (:postId, :userId, :body, :created_at, :updated_at)';
       $stmt = $db->prepare($query);
-      $stmt->bindParam(':createdAt', $this->createdAt, PDO::PARAM_STR);
+      $stmt->bindParam(':created_at', $this->created_at, PDO::PARAM_STR);
     }
 
     $stmt->bindParam(':postId', $this->postId, PDO::PARAM_INT);
     $stmt->bindParam(':userId', $this->userId, PDO::PARAM_INT);
     $stmt->bindParam(':body', $this->body, PDO::PARAM_STR);
-    $stmt->bindParam(':updatedAt', $this->updatedAt, PDO::PARAM_STR);
+    $stmt->bindParam(':updated_at', $this->updated_at, PDO::PARAM_STR);
     $stmt->execute();
 
     if (!$this->id) {
       $this->id = $db->lastInsertId();
     }
   }
+  public static function getAll()
+  {
+    $pdo = Database::getInstance()->getConnection();
+    $stmt = $pdo->prepare('SELECT * FROM comments ORDER BY created_At DESC');
+    $stmt->execute();
+
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $comments = [];
+
+    foreach ($results as $result) {
+      $comment = new static();
+      $comment->setId($result['id']);
+      $comment->setPostId($result['postId']);
+      $comment->setUserId(isset($result['userId']) ? $result['userId'] : null); // Change this line
+      $comment->setBody($result['body']);
+      $comment->setName($result['name']);
+      $comment->setEmail($result['email']);
+      $comment->setcreated_at(isset($result['created_At']) ? $result['created_At'] : null); // Change this line
+      $comment->setupdated_at(isset($result['updated_at']) ? $result['updated_at'] : null); // Change this line
+
+      $comments[] = $comment;
+    }
+
+    return $comments; // Retourne les résultats
+  }
+  public function createComment()
+  {
+    $sql = "INSERT INTO comments (postId, name, email, body, created_At) VALUES (:postId, :name, :email, :body, :created_At)";
+    $db = Database::getInstance()->getConnection();
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':postId', $this->postId, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $this->name);
+    $stmt->bindParam(':email', $this->email);
+    $stmt->bindParam(':body', $this->body);
+    $stmt->bindParam(':created_At', $this->created_at);
+
+    $stmt->execute();
+  }
+  public static function getByPostId($postId)
+  {
+    $pdo = Database::getInstance()->getConnection();
+    $stmt = $pdo->prepare('SELECT * FROM comments WHERE postId = ?');
+    $stmt->execute([$postId]);
+
+    $comments = [];
+    while ($row = $stmt->fetch()) {
+      $comment = new Comment(
+        $row['postId'],
+        $row['name'],
+        $row['email'],
+        $row['body'],
+        $row['id'],
+        $row['created_At'],
+        NULL // There is no updated_at column in your comments table
+      );
+      $comments[] = $comment;
+    }
+
+    return $comments;
+  }
+
 }

@@ -23,7 +23,7 @@ class User
   {
     $this->id = $id;
     $this->name = $name;
-    $this->username = $username;
+    $this->username = $username; // Ajoutez cette ligne
     $this->email = $email;
     $this->passwordHash = $passwordHash;
     $this->created_At = $created_At;
@@ -40,7 +40,7 @@ class User
     $stmt->execute([$id]);
 
     if ($row = $stmt->fetch()) {
-      $user = new User($row['email'], $row['password_hash'], $row['id'], $row['name'], $row['created_at'], $row['updated_at'], $row['role']);
+      $user = new User($row['email'], $row['password_hash'], $row['id'], $row['name'], $row['username'], $row['created_at'], $row['updated_at'], $row['role']); // Ajoutez $row['username']
       return $user;
     }
 
@@ -229,5 +229,19 @@ $this->updated_At = $updated_At;
     }
 
     return false;
+  }
+  public static function findById($id)
+  {
+    $pdo = Database::getInstance()->getConnection();
+
+    $stmt = $pdo->prepare('SELECT * FROM user WHERE id = ?');
+    $stmt->execute([$id]);
+
+    if ($row = $stmt->fetch()) {
+      $user = new User($row['email'], $row['password_hash'], $row['id'], $row['name'], $row['username'], $row['created_at'], $row['updated_at'], $row['role']);
+      return $user;
+    }
+
+    return null;
   }
 }

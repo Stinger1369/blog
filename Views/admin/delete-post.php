@@ -7,6 +7,6 @@ use Controllers\PostController;
 
 $postController = new PostController();
 $postId = $_POST['id'];
-$postController->delete(['id' => $postId]); // Pass an array with 'id' key to match the method signature
+$postController->delete(['id' => $postId]);
 
 

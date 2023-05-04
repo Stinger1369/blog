@@ -5,6 +5,11 @@
   <meta charset="UTF-8">
   <title>Mon blog</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css">
+  <!--<link rel="stylesheet" href="<?= BASE_URL ?>/public/css/style.css">-->
+
+
+  <script src="<?= BASE_URL ?>/public/js/loadMoreComments.js" defer></script>
+  <base href="<?= BASE_URL ?>">
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen">
@@ -24,7 +29,7 @@
           <li class="text-gray-300">Bonjour <?php echo $_SESSION['user_name']; ?></li>
         <?php else : ?>
           <li><a href="<?= BASE_URL ?>/login" class="hover:text-gray-300">Login</a></li>
-          <li><a href="<?= BASE_URL ?>/register" class="hover:text-gray-300">Inscription</a></li>
+          <!--<li><a href="<?= BASE_URL ?>/register" class="hover:text-gray-300">Inscription</a></li>-->
         <?php endif; ?>
       </ul>
     </nav>

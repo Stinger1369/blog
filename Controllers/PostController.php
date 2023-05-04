@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Models\Post;
+use Models\Comment;
 
 class PostController
 {
@@ -161,4 +162,23 @@ class PostController
     // Inclure le fichier de vue 'admin/add-post.php'
     require_once(__DIR__ . '/../Views/admin/add-post.php');
   }
+
+
+  public function show($vars)
+  {
+    // Récupération de l'ID du post depuis l'URL
+    $id = $vars['id'];
+
+    // Récupération du post correspondant à l'identifiant $id
+    $post = Post::getById($id);
+
+    // Récupération des commentaires associés au post
+    $comments = Comment::getByPostId($id);
+    //var_dump($comments);
+
+    // Affichage de la vue home/show.php avec les données récupérées
+    require __DIR__ . '/../views/home/show.php';
+  }
+
+
 }

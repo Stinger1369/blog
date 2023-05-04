@@ -12,6 +12,9 @@ $posts = $postController->getAllPosts();
   <a href="<?php echo BASE_URL; ?>/admin/add-post" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
     Add Post
   </a>
+  <a href="<?php echo BASE_URL; ?>/admin/commentCrud/index" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Manage Comment
+  </a>
   <a href="<?php echo BASE_URL; ?>/admin/manage-users" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
     Manage Users
   </a>
@@ -34,6 +37,7 @@ $posts = $postController->getAllPosts();
           <td class="border px-4 py-2"><?php echo $post->getCreated_At(); ?></td>
           <td class="border px-4 py-2"><?php echo $post->getUpdated_At(); ?></td>
           <td class="border px-4 py-2">
+
             <a href="<?php echo BASE_URL; ?>/admin/edit-post?id=<?php echo $post->getId(); ?>" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
               Modifier
             </a>

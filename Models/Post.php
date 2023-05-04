@@ -39,12 +39,13 @@ class Post
     return $posts;
   }
 
-  public static function getLatestPosts($limit)
+  public static function getLatestPosts($limit, $offset)
   {
     $pdo = Database::getInstance()->getConnection();
 
-    $stmt = $pdo->prepare('SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit');
+    $stmt = $pdo->prepare('SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit OFFSET :offset');
     $stmt->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
+    $stmt->bindValue(':offset', (int) $offset, \PDO::PARAM_INT);
     $stmt->execute();
 
     $posts = [];
@@ -57,7 +58,14 @@ class Post
     return $posts;
   }
 
+  public static function getTotalPosts()
+  {
+    $pdo = Database::getInstance()->getConnection();
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM posts');
+    $stmt->execute();
 
+    return $stmt->fetchColumn();
+  }
 
   public static function getById($id)
   {
@@ -102,14 +110,15 @@ class Post
   {
     $pdo = Database::getInstance()->getConnection();
 
-    // Supprimer les commentaires liés au post
-    $stmt = $pdo->prepare('DELETE FROM comments WHERE id = ?');
+    // Delete comments associated with the post
+    $stmt = $pdo->prepare('DELETE FROM comments WHERE postId = ?');
     $stmt->execute([$this->id]);
 
-    // Supprimer le post
+    // Delete the post
     $stmt = $pdo->prepare('DELETE FROM posts WHERE id = ?');
     $stmt->execute([$this->id]);
   }
+
 
   public function setId($id)
   {
@@ -176,24 +185,12 @@ class Post
     // Récupération de l'utilisateur associé à ce post
     return User::getById($this->userId);
   }
-  public static function getByPostId($postId)
-{
-  $pdo = Database::getInstance()->getConnection();
-  $stmt = $pdo->prepare('SELECT * FROM comments WHERE post_id = ?');
-  $stmt->execute([$postId]);
 
-  $comments = [];
-  while ($row = $stmt->fetch()) {
-    $comment = new Comment($row['author'], $row['content'], $row['post_id'], $row['id'], $row['created_at'], $row['updated_at']);
-    $comments[] = $comment;
-  }
-
-  return $comments;
-}
 
   public function getComments()
   {
     // Récupération des commentaires associés à ce post
-    return self::getByPostId($this->id);
+    return Comment::getByPostId($this->id);
   }
+
 }
