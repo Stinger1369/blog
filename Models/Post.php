@@ -14,6 +14,8 @@ class Post
   protected $userId;
   protected $created_at;
   protected $updated_At;
+  protected $comments;
+
 
   public function __construct($title, $body, $userId, $id = null, $created_at = null, $updated_At = null)
   {
@@ -192,5 +194,29 @@ class Post
     // Récupération des commentaires associés à ce post
     return Comment::getByPostId($this->id);
   }
+
+  public function setComments($comments)
+  {
+    $this->comments = $comments;
+  }
+
+  public function getCommentsForPost($postId)
+  {
+    $pdo = Database::getInstance()->getConnection();
+
+    $stmt = $pdo->prepare('SELECT * FROM comments WHERE post_id = :postId');
+    $stmt->bindValue(':postId', (int) $postId, \PDO::PARAM_INT);
+    $stmt->execute();
+
+    $comments = [];
+
+    while ($row = $stmt->fetch()) {
+      $comment = new Comment($row['email'], $row['body'], $row['post_id'], $row['id'], $row['created_at'], $row['updated_at'] ?? null);
+      $comments[] = $comment;
+    }
+
+    return $comments;
+  }
+
 
 }

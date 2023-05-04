@@ -27,7 +27,7 @@ require_once __DIR__ . '/../partials/header.php';
           <h2 class="text-2xl font-semibold mb-4"><a href="<?= BASE_URL ?>/posts/<?= $post->getId() ?>"><?= $post->getTitle() ?></a></h2>
           <div class="post-content">
             <p class="mb-4"><?= substr($post->getBody(), 0, strlen($post->getBody()) / 2) ?></p>
-            <p class="mb-4 hidden post-remaining-content"><?= substr($post->getBody(), strlen($post->getBody()) / 2) ?></p>
+            <p class="mb-4 "><?= substr($post->getBody(), strlen($post->getBody()) / 2) ?></p>
           </div>
           <?php $user = $post->getUser(); ?>
           <?php if ($user !== null) : ?>
@@ -73,8 +73,74 @@ require_once __DIR__ . '/../partials/header.php';
     </div>
 
   </main>
-  <script src="<?= BASE_URL ?>/public/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const showCommentsButtons = document.querySelectorAll('.show-comments-button');
+      const hideCommentsButtons = document.querySelectorAll('.hide-comments-button');
+      const commentButtons = document.querySelectorAll('.comment-button');
+      const commentForms = document.querySelectorAll('.comment-form');
 
+      // Écouteur d'événement pour le bouton "Afficher les commentaires"
+      showCommentsButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          const commentsDiv = button.closest('article').querySelector('.post-comments');
+          commentsDiv.classList.remove('hidden');
+          button.classList.add('hidden');
+          button.nextElementSibling.classList.remove('hidden');
+        });
+      });
+
+      // Écouteur d'événement pour le bouton "Cacher les commentaires"
+      hideCommentsButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          const commentsDiv = button.closest('article').querySelector('.post-comments');
+          commentsDiv.classList.add('hidden');
+          button.classList.add('hidden');
+          button.previousElementSibling.classList.remove('hidden');
+        });
+      });
+
+      // Écouteur d'événement pour la soumission des formulaires de commentaire
+      commentForms.forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          const postId = form.querySelector('input[name="post_id"]').value;
+          const email = form.querySelector('input[name="email"]').value;
+          const body = form.querySelector('textarea[name="body"]').value;
+
+          const formData = new FormData();
+          formData.append('post_id', postId);
+          formData.append('email', email);
+          formData.append('body', body);
+
+          fetch('<?= BASE_URL ?>/add-comment', {
+              method: 'POST',
+              body: formData,
+            })
+            .then((response) => {
+              if (response.ok) {
+                return response.text();
+              } else {
+                throw new Error('Erreur lors de l\'ajout du commentaire');
+              }
+            })
+            .then((data) => {
+              const commentsDiv = document.querySelector(`.post-comments[data-post-id="${postId}"]`);
+              const newComment = document.createElement('li');
+              newComment.textContent = body;
+              commentsDiv.querySelector('ul').appendChild(newComment);
+
+              form.querySelector('textarea[name="body"]').value = '';
+              form.classList.add('hidden');
+            })
+            .catch((error) => {
+              console.error('Erreur:', error);
+            });
+        });
+      });
+    });
+  </script>
 
 </body>
 

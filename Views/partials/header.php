@@ -6,10 +6,10 @@
   <title>Mon blog</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css">
   <!--<link rel="stylesheet" href="<?= BASE_URL ?>/public/css/style.css">-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-  <script src="<?= BASE_URL ?>/public/js/loadMoreComments.js" defer></script>
-  <base href="<?= BASE_URL ?>">
+
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen">

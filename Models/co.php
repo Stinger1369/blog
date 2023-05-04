@@ -110,6 +110,7 @@ class Comment extends Model
   {
     $this->updated_at = $updated_at;
   }
+
   public static function getAllByPostId($postId)
   {
     $db = static::getDb();
@@ -159,24 +160,22 @@ class Comment extends Model
 
     if ($this->id) {
       // Update the existing comment
-      $query = 'UPDATE comments SET postId = :postId, user_id = :userId, name = :name, email = :email, body = :body, updated_at = :updated_at WHERE id = :id';
+      $query = 'UPDATE comments SET post_id = :postId, user_id = :userId, name = :name, email = :email, body = :body, created_at = :created_at, updated_at = :updated_at WHERE id = :id';
       $stmt = $db->prepare($query);
       $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
     } else {
       // Insert a new comment
       $query = 'INSERT INTO comments (post_id, user_id, name, email, body, created_at, updated_at) VALUES (:postId, :userId, :name, :email, :body, :created_at, :updated_at)';
       $stmt = $db->prepare($query);
-      $createdAt = date('Y-m-d H:i:s');
-      $stmt->bindParam(':created_at', $createdAt, PDO::PARAM_STR);
+      $stmt->bindParam(':created_at', $this->created_at, PDO::PARAM_STR);
     }
 
     $stmt->bindParam(':postId', $this->postId, PDO::PARAM_INT);
     $stmt->bindParam(':userId', $this->userId, PDO::PARAM_INT);
     $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
     $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
-    $stmt->bindParam(':body', $this->body, PDO::PARAM_STR); // Ajoutez cette ligne
-    $updatedAt = date('Y-m-d H:i:s');
-    $stmt->bindParam(':updated_at', $updatedAt, PDO::PARAM_STR);
+    $stmt->bindParam(':body', $this->body, PDO::PARAM_STR);
+    $stmt->bindParam(':updated_at', $this->updated_at, PDO::PARAM_STR);
     $stmt->execute();
 
     if (!$this->id) {
@@ -251,29 +250,17 @@ class Comment extends Model
     $comments = Comment::getByPostId($postId);
     return $comments;
   }
-
   public static function getById($id)
   {
     $db = static::getDb();
     $req = $db->prepare('SELECT * FROM comments WHERE id = :id');
     $req->execute(array('id' => $id));
-    $row = $req->fetch(PDO::FETCH_ASSOC);
+    $comment = $req->fetchObject(static::class);
 
-    if ($row) {
-      $comment = new static();
-      $comment->setId($row['id']);
-      $comment->setPostId($row['postId']);
-      $comment->setUserId(isset($row['userId']) ? $row['userId'] : null);
-      $comment->setName($row['name']);
-      $comment->setEmail($row['email']);
-      $comment->setBody($row['body']);
-      $comment->setcreated_at(isset($row['created_At']) ? $row['created_At'] : null);
-      $comment->setupdated_at(isset($row['updated_at']) ? $row['updated_at'] : null);
-
+    if ($comment) {
       return $comment;
     } else {
       return false;
     }
   }
-
 }

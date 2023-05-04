@@ -23,11 +23,12 @@ class Router
 
     //$this->router->map('GET', '/posts/[i:id]/', 'Controllers\PostController#show');
     $this->router->map('GET', '/admin/edit-post', 'Controllers\PostController#edit');
+    $this->router->map('POST', '/admin/edit-post', 'Controllers\PostController#update');
 
     $this->router->map('GET','/comments/loadMore/:postId/:offset', 'CommentController#loadMore');
 
 
-    $this->router->map('POST', '/admin/edit-post', 'Controllers\PostController#update');
+
 
     $this->router->map('POST', '/posts/create/', 'Controllers\PostController#create');
     $this->router->map('POST', '/admin/delete-post', 'Controllers\PostController#delete');
@@ -64,23 +65,34 @@ class Router
 
     //$this->router->map('GET|POST', '/admin/userCrud/register', 'UserController#register');
 
-    $this->router->map('GET','/posts/(\d+)/comments/load-more/(\d+)', 'CommentController#loadMoreComments');
+    //$this->router->map('GET','/posts/(\d+)/comments/load-more/(\d+)', 'CommentController#loadMoreComments');
 
 
     //Comment
     $this->router->map('GET', '/admin/commentCrud/index', 'Controllers\CommentController#index');
     $this->router->map('GET', '/admin/commentCrud', 'Controllers\CommentController#adminIndex');
-    $this->router->map('GET', '/admin/commentCrud/create', 'Controllers\CommentController#adminCreate');
-    $this->router->map('POST', '/admin/commentCrud/store', 'Controllers\CommentController#store');
+    //$this->router->map('GET', '/admin/commentCrud/create', 'Controllers\CommentController#adminCreate');
+    //$this->router->map('POST', '/admin/commentCrud/store', 'Controllers\CommentController#store');
 
-    $this->router->map('GET', '/admin/editcomment/[i:id]', 'Controllers\CommentController#edit', 'edit_comment');
+    //$this->router->map('GET', '/admin/edit-post', 'Controllers\PostController#edit');
+    //$this->router->map('POST', '/admin/edit-post', 'Controllers\PostController#update');
+
+    $this->router->map('GET', '/admin/commentCrud/editcomment/[i:id]', 'Controllers\CommentController#editComment');
     $this->router->map('GET', '/admin/commentCrud/index/[i:post_id]', 'Controllers\CommentController#indexByPostId');
 
-    $this->router->map('POST', '/admin/commentCrud/update', 'Controllers\CommentController#update');
-    $this->router->map('GET', '/admin/commentCrud/[i:id]/delete', 'Controllers\CommentController#destroy');
+    $this->router->map('POST', '/admin/commentCrud/updateComment', 'Controllers\CommentController#updateComment');
+    $this->router->map('POST', '/admin/commentCrud/delete/[i:id]', 'Controllers\CommentController#destroy');
+
+
+    //$this->router->map('GET', '/admin/commentCrud/create', 'Controllers\CommentController#create');
+    $this->router->map('POST', '/admin/store', 'Controllers\CommentController#store');
+
 
     $this->router->map('POST', '/add-comment', 'Controllers\CommentController#addComment');
+    $this->router->map('GET','/get-comments', 'Controllers\HomeController#getComments');
 
+    //$this->router->map('POST', '/admin/commentCrud/deleteSelected', 'Controllers\CommentController#deleteSelected');
+    $this->router->map('GET', '/load-more-comments/[i:post_id]/[i:offset]', 'CommentController#loadMoreComments');
 
     // Erreur 404
     //$this->router->map('GET', '/404', 'Controllers\ErrorController#notFound');

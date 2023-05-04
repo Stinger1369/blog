@@ -2,7 +2,9 @@
 
 namespace Controllers;
 
+use Config\Database;
 use Models\Post;
+use Models\Comment;
 
 class HomeController
 {
@@ -21,5 +23,30 @@ class HomeController
     require __DIR__ . '/../views/home/index.php';
   }
 
+
+  public static function getLatestPosts($limit)
+  {
+    $pdo = Database::getInstance()->getConnection();
+
+    $stmt = $pdo->prepare('SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit');
+    $stmt->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
+    $stmt->execute();
+
+    $posts = [];
+
+    while ($row = $stmt->fetch()) {
+      $post = new Post($row['title'], $row['body'], $row['userId'] ?? null, $row['id'], $row['created_at'], $row['updated_at'] ?? null);
+      $post->setComments(Comment::getCommentsForPost($post->getId())); // fetch comments for post
+      $posts[] = $post;
+    }
+
+    return $posts;
+  }
+
+  public static function getCommentsForPost($postId)
+  {
+    $comments = Comment::getByPostId($postId);
+    return $comments;
+  }
 
 }
