@@ -29,8 +29,11 @@ class Router
 
     // Commentaires
     $this->router->map('POST', '/comments/create', 'Controllers\CommentController#create');
-    $this->router->map('GET', '/comments/loadMore/:postId/:offset', 'CommentController#loadMore');
-    $this->router->map('GET', '/load-more-comments/[i:post_id]/[i:offset]', 'CommentController#loadMoreComments');
+    //$this->router->map('GET', '/comments/loadMore/:postId/:offset', 'CommentController#loadMore');
+    //$this->router->map('GET', '/comments/loadMore/:postId/:offset/:limit', 'CommentController#loadMore');
+    $this->router->map('GET', '/comments/loadMore/:postId/:offset/:limit', 'CommentController#loadMoreComments');
+
+    //$this->router->map('GET', '/load-more-comments/[i:post_id]/[i:offset]', 'CommentController#loadMoreComments');
     $this->router->map('GET', '/get-comments', 'Controllers\HomeController#getComments');
     $this->router->map('POST', '/add-comment', 'Controllers\CommentController#addComment');
 

@@ -6,7 +6,7 @@
   <title>Mon blog</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css">
   <!--<link rel="stylesheet" href="<?= BASE_URL ?>/public/css/style.css">-->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="vendor/components/jquery/jquery.min.js"></script>
 
 
 

@@ -126,33 +126,42 @@ class CommentController
   }
 
 
-  public function loadMoreComments($post_id, $offset, $limit = 2)
+  public function loadMoreComments($post_id, $offset, $limit)
   {
+    ob_start(); // Start output buffering
+
     $comments = Comment::getAllByPostId($post_id, $limit, $offset);
     header('Content-Type: application/json');
+
+    ob_end_clean();
+
+    file_put_contents('log.txt', "Fonction loadMoreComments appelée\n", FILE_APPEND);
+
     echo json_encode($comments);
     exit();
   }
 
-  public function loadMore()
-  {
-    $postId = $_GET['post_id'];
-    $limit = $_GET['limit'];
-    $offset = $_GET['offset'];
+  // public function loadMore()
+  // {
+  //   $postId = $_GET['post_id'];
+  //   $limit = $_GET['limit'];
+  //   $offset = $_GET['offset'];
 
-    $comments = Comment::getByPostId($postId, $limit, $offset);
+  //   $comments = Comment::getByPostId($postId, $limit, $offset);
 
-    $response = array();
-    foreach ($comments as $comment) {
-      $response[] = array(
-        'name' => $comment->getName(),
-        'body' => $comment->getBody()
-      );
-    }
+  //   $response = array();
+  //   foreach ($comments as $comment) {
+  //     $response[] = array(
+  //       'name' => $comment->getName(),
+  //       'body' => $comment->getBody()
+  //     );
+  //   }
 
-    header('Content-Type: application/json');
-    echo json_encode($response);
-  }
+  //   header('Content-Type: application/json');
+  //   file_put_contents('log.txt', "Fonction loadMore appelée\n", FILE_APPEND);
+  //   echo json_encode($response);
+  // }
+
 
 
 
