@@ -244,4 +244,20 @@ $this->updated_At = $updated_At;
 
     return null;
   }
+
+  // public function emailExists($email)
+  // {
+  //   $pdo = Database::getInstance()->getConnection();
+  //   $stmt = $pdo->prepare('SELECT COUNT(*) FROM user WHERE email = ?');
+  //   $stmt->execute([$email]);
+  //   $count = $stmt->fetchColumn();
+  //   return $count > 0;
+  // }
+
+  // public function createUser($user)
+  // {
+  //   $pdo = Database::getInstance()->getConnection();
+  //   $stmt = $pdo->prepare('INSERT INTO user (name, email, password_hash) VALUES (?, ?, ?)');
+  //   $stmt->execute([$user['name'], $user['email'], $user['password_hash']]);
+  // }
 }

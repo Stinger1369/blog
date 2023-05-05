@@ -144,4 +144,53 @@ public function updateUser()
 }
 
 
+//Inscription
+
+//  public function register() {
+//         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//             // Récupération des données du formulaire
+//             $name = $_POST['name'];
+//             $email = $_POST['email'];
+//             $password = $_POST['password'];
+
+//             // Validation des données
+//             if (empty($name) || empty($email) || empty($password)) {
+//                 // Affichage d'un message d'erreur si des champs sont vides
+//                 $error = "Tous les champs sont obligatoires.";
+//                 require_once('views/register.php');
+//                 return;
+//             }
+
+//             // Vérification si l'adresse e-mail est déjà utilisée
+//             $userModel = new User();
+//             $emailExists = $userModel->emailExists($email);
+//             if ($emailExists) {
+//                 // Affichage d'un message d'erreur si l'adresse e-mail est déjà utilisée
+//                 $error = "L'adresse e-mail est déjà utilisée.";
+//                 require_once('views/register.php');
+//                 return;
+//             }
+
+//             // Hashage du mot de passe
+//             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+//             // Enregistrement de l'utilisateur dans la base de données
+//             $user = [
+//                 'name' => $name,
+//                 'email' => $email,
+//                 'password_hash' => $passwordHash
+//             ];
+//             $userModel->createUser($user);
+
+//             // Redirection vers la page de connexion
+//             header('Location: index.php?action=login');
+//             exit();
+//         } else {
+//             // Affichage du formulaire d'inscription
+//             require_once('views/register.php');
+//         }
+//     }
+
 }
+
+
