@@ -6,7 +6,7 @@ $postController = new \Controllers\PostController();
 $posts = $postController->getAllPosts();
 ?>
 
-<h1 class="text-4xl font-bold mb-8">Dashboard</h1>
+<h1 class="text-4xl font-bold mb-8">Tableau de bord</h1>
 
 <div class="flex justify-between items-center mb-8">
   <a href="<?php echo BASE_URL; ?>/admin/add-post" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

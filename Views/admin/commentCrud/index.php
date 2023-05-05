@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../../partials/header.php';
 ?>
 
-<h1 class="text-4xl font-bold mb-8">Dashboard</h1>
 <div class="container mx-auto px-4">
   <div class="grid grid-cols-1">
     <div class="col-span-1">
